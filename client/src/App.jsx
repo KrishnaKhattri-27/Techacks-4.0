@@ -1,12 +1,26 @@
 import "./App.css";
+import Dashboard from "./page/Dashboard";
+import Login from "./page/Login"
+import Police from "./page/Police"
+import Traffic from "./page/Traffic";
+import {Routes,Route} from "react-router-dom"
 
 function App() {
   return (
-    <main className="flex justify-center gap-4 flex-col min-h-screen">
-      <h1 className="text-3xl text-center font-bold underline">React & Tailwind CSS Starter Pack</h1>
-      <p className="text-center text-xl">This is a starter pack for React & Tailwind CSS projects.</p>
-      <img src="https://bit.ly/3wsmzTy" alt="meme" className="mx-auto" />
-    </main>
+    <Routes>
+    <Route path="/" element={<Dashboard />} />
+    <Route
+      path="/login"
+      element={
+        <Login  />
+      }
+    />
+    <Route
+      path="/police"
+      element={<Police  />}
+    />
+    <Route path="/traffic" element={<Traffic />} />
+  </Routes>
   );
 }
 
