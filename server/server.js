@@ -52,7 +52,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const PrisonerData = mongoose.model("Prisoner");
 
 app.post("/api/recievePrisoner", (req, res) => {
-  const { name, photo, age, gender, history } = req.body.result;
+  const { name, photo, age, gender, history } = req.body;
 
   try {
     PrisonerData.create({
@@ -81,13 +81,13 @@ app.post("/api/recievePrisoner", (req, res) => {
 //   });
 // });
 
-// app.post("/api/recieveActivityPrediction", (req, res) => {
-//   console.log(req.body.prediction);
-//   io.emit("messageFromActivity", req.body.prediction);
-//   res.json({
-//     message: "ACtivity predictions received on the server",
-//   });
-// });
+app.post("/api/recieveActivityPrediction", (req, res) => {
+  console.log(req.body.prediction);
+  // io.emit("messageFromActivity", req.body.prediction);
+  res.json({
+    message: "ACtivity predictions received on the server",
+  });
+});
 
 // Start the server
 const PORT = process.env.PORT || 5000;
