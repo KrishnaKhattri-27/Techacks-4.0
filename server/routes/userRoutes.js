@@ -8,10 +8,10 @@ const router = express.Router();
 
 router.post("/api/recievePrisoner",getPrisinor)
 router.post('/login',loginUser)
+router.post('/sendMail',mail)
 router.use(authRequired)
 
 // router.post('/sendNotification',notification)
-// router.post('/sendMail',mail)
 // router.post("/api/receiveImageChunk",)
 // router.get("/getDetails",)
 
