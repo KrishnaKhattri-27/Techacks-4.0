@@ -4,15 +4,16 @@ import requests
 import cloudinary
 import cloudinary.uploader
 
-cloudinary.config(
-    cloud_name="dohky5q86",
-    api_key="971431767226324",
-    api_secret="lZcQav4UbfAHM3M2GbcxZ9YtbdM"
-)
-flag = 1
-
 
 def capture_and_verify():
+
+    cloudinary.config(
+        cloud_name="dohky5q86",
+        api_key="971431767226324",
+        api_secret="lZcQav4UbfAHM3M2GbcxZ9YtbdM"
+    )
+    flag = 1
+
     cap = cv2.VideoCapture(0)
 
     while True:
@@ -56,9 +57,7 @@ def capture_and_verify():
                 flag = 0
                 exit()
 
+        cv2.imshow("Face", frame)
+
     cap.release()
     cv2.destroyAllWindows()
-
-
-while flag:
-    capture_and_verify()
