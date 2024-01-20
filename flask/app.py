@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request
 from threading import Thread, Lock
 import detect
 import activity
+import face
 from flask_cors import CORS
 from tensorflow.keras.models import load_model
 
@@ -21,6 +22,7 @@ detection_data = DetectionData()
 detection_thread = None
 traffic_thread = None
 activity_thread = None
+face_thread = None
 
 
 @app.route('/start-detection', methods=['POST'])
@@ -82,6 +84,25 @@ def start_activity():
             return jsonify({"status": "Activity Detection started"}), 200
         else:
             return jsonify({"status": "Activity Detection already running"}), 200
+    else:
+        return jsonify({"status": "Invalid message"}), 400
+
+
+@app.route('/start-face', methods=['POST'])
+def start_face():
+    global face_thread
+
+    message = request.json.get('message', '')
+    print(f"Received message: {message}")
+
+    if message == "Start":
+        if face_thread is None or not face_thread.is_alive():
+            face_thread = Thread(target=face.capture_and_verify)
+            face_thread.start()
+            print("Started Face")
+            return jsonify({"status": "Face Detection started"}), 200
+        else:
+            return jsonify({"status": "Face Detection already running"}), 200
     else:
         return jsonify({"status": "Invalid message"}), 400
 
