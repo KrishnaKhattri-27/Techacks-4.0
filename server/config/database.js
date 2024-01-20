@@ -1,20 +1,22 @@
 const { error } = require("console");
 const mongoose = require("mongoose");
-
 require("dotenv").config();
 
-const dbconnect = () => {
-  mongoose
-    .connect(
-      "mongodb+srv://dhruvchandak5:IUC3raqyzYuPkvkp@recognition.wyyroyh.mongodb.net/?retryWrites=true&w=majority"
-    )
-    .then(() => {
-      console.log("database connected");
-    })
-    .catch((error) => {
-      console.log(error.message);
-      process.exit(1);
+const police_station = require("../models/PoliceStation"); // Replace with the actual path to your police station model
+
+const dbconnect = async () => {
+  try {
+    const url = process.env.URL;
+    await mongoose.connect(url, {
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
     });
+    console.log("Database connected");
+    // await logCollectionNames();
+  } catch (error) {
+    console.error(error.message);
+    process.exit(1);
+  }
 };
 
 module.exports = dbconnect;
