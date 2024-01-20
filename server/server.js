@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-// const routes = require("./routes/userRoutes");
+const routes = require("./routes/userRoutes");
 const http = require("http");
 const connectDB = require("./utils/database");
 const cors = require("cors");
@@ -26,7 +26,8 @@ app.use(
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use("/v1", routes);
+app.use("/v1", routes);
+
 
 // Socket.IO connection event
 // io.on("connection", (socket) => {

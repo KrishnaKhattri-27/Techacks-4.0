@@ -1,66 +1,30 @@
-// const mongoose  = require("mongoose");
-// const bcrypt=require('bcrypt')
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
-// const registerUser=mongoose.Schema(
-//     {
-//         username:{
-//             type:String,
-//             required:true,
-//             unique:true
-//         },
-//         password:{
-//             type:String,
-//             required:true,
-//         }
-//     }
-// );
+const registerUser = mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+});
 
-// // //stastic signup method
-// // registerUser.statics.signup = async function(userData){
-// //     const exists=await this.findOne({username:userData.username})
-    
-// //     if(exists)
-// //     throw Error("username already in use")
+//static log-in method
+registerUser.statics.login = async function (name, password) {
+  if (!name || !password) throw Error("Email already in use");
 
-// //     const salt=await bcrypt.genSalt(10)
-// //     const hash = await bcrypt.hash(userData.password,salt)
+  const user = await this.findOne({ email });
 
-// //     const response= await this.create({
-// //         username:userData.username,
-// //         gender:userData.gender,
-// //         hearAbout:userData.hearAbout,
-// //         city:userData.city,
-// //         state:userData.state,
-// //         name:userData.name,
-// //         phone:userData.phone,
-// //         password:hash,
+  if (!user) throw Error("Email not exists. Please register first");
 
-// //     })
+  const match = await bcrypt.compare(password, user.password);
 
-// //     return response;
+  if (!match) throw Error("Incoreect Password");
 
-// // };
+  return user;
+};
 
-
-// //static log-in method
-// registerUser.statics.login = async function(username,password){
-    
-     
-//     if(!username || !password)
-//     throw Error("username already in use")
-
-//     const user=await this.findOne({username})
-
-//     if(!user)
-//     throw Error("username not exists. Please register first")
-
-//     const match=await bcrypt.compare(password,user.password)
-
-//     if(!match)
-//     throw Error("Incoreect Password")
-
-//     return user
-// };
-
-
-// module.exports=mongoose.model('user',registerUser);
+module.exports = mongoose.model("user", registerUser);
