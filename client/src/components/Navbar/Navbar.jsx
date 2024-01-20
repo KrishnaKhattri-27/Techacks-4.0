@@ -7,7 +7,9 @@ import {motion} from "framer-motion"
 
 
 
+
 const Navbar = () => {
+
   const divprop3 = {
     initial: { y: -500 },
     animate: { y:0},

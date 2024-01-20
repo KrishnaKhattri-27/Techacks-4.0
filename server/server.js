@@ -24,9 +24,7 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-// app.use("/v1", routes);
+app.use("/v1", routes);
 
 // Socket.IO connection event
 io.on("connection", (socket) => {
@@ -44,7 +42,7 @@ io.on("connection", (socket) => {
 const PrisonerData = mongoose.model("Prisoner");
 
 app.post("/api/recievePrisoner", (req, res) => {
-  const { name, photo, age, gender, history, location } = req.body;
+  const { name, photo, age, gender, history } = req.body;
 
   try {
     PrisonerData.create({
