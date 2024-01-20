@@ -39,10 +39,18 @@ io.on("connection", (socket) => {
   });
 });
 
+app.post("/api/receiveImageChunk", (req, res) => {
+  console.log(req.body.image_url, req.body.result);
+  io.emit("messageFromServer", req.body.result, req.body.image_url);
+  res.json({
+    message: "Image received on the server",
+  });
+});
+
 const PrisonerData = mongoose.model("Prisoner");
 
 app.post("/api/recievePrisoner", (req, res) => {
-  const { name, photo, age, gender, history } = req.body;
+  const { name, photo, age, gender, history, location } = req.body;
 
   try {
     PrisonerData.create({
@@ -57,7 +65,7 @@ app.post("/api/recievePrisoner", (req, res) => {
         coordinates: [location.longitude, location.latitude],
       },
     });
-
+    io.emit("messageFromFace", req.body);
     res.json({
       message: "Data of Prisoner received on the server",
     });

@@ -4,6 +4,7 @@ from threading import Thread, Lock
 import detect
 import activity
 import face
+import traffic
 from flask_cors import CORS
 from tensorflow.keras.models import load_model
 
@@ -59,7 +60,7 @@ def start_traffic():
 
     if message == "Start":
         if traffic_thread is None or not traffic_thread.is_alive():
-            traffic_thread = Thread(target=main.traffic)
+            traffic_thread = Thread(target=traffic.traffic)
             traffic_thread.start()
             print("Started")
             return jsonify({"status": "Traffic Detection started"}), 200

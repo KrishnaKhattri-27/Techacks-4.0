@@ -27,6 +27,7 @@ const PopUp = ({ messages, yesHandler, status }) => {
       audio.pause();
     }, 10000);
   };
+  console.log("Recieved PopUP");
 
   useEffect(() => {
     if (status) playAudio();
