@@ -1,11 +1,56 @@
-import React from 'react'
+import React, { useState } from "react";
+import TrafficResponse from "../components/Traffic/TrafficResponse";
+import Navbar from "../components/Navbar/Navbar";
+import PopUp from "../components/Police/PopUp";
+import Button from "../components/Button/Button";
 
-const Traffic = () => {
+const Traffic = ({ status, messages ,yesHandler}) => {
+  const [detectionResult, setDetectionResult] = useState(null);
+  const [data, setData] = useState("");
+  const [imageData, setImageData] = useState(null);
+  const [errorDetecting, setErrorDetecting] = useState("");
+
+  const startFaceDetection = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/start-face", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: "Start",
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Start Object Detection", result.detection_result);
+      } else {
+        console.error("Failed to start face detection:", response.statusText);
+        setErrorDetecting("Failed to start face detection");
+      }
+    } catch (error) {
+      console.error("Error during face detection request:", error.message);
+      setErrorDetecting("Error during face Detection");
+    }
+  };
+
+  
   return (
-    <div>
-      
+    <div className="homebg h-screen">
+      <Navbar />
+      <TrafficResponse
+        detectionResult={detectionResult}
+        data={data}
+        imageData={imageData}
+        errorDetecting={errorDetecting}
+        startObjectDetection={startFaceDetection}
+        // CheckActivityDetection={CheckActivityDetection}
+        // startObjectDetection={startObjectDetection}
+      />
+      {status ? <PopUp status={status} messages={messages} yesHandler={yesHandler} /> : null}
     </div>
-  )
-}
+  );
+};
 
-export default Traffic
+export default Traffic;
