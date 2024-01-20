@@ -1,9 +1,10 @@
 import React from 'react'
+import Navbar from '../components/Navbar/Navbar'
 
 const Dashboard = () => {
   return (
-    <div>
-      
+    <div className='h-screen bg-black'>
+      <Navbar/>
     </div>
   )
 }
