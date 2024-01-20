@@ -22,10 +22,10 @@ const Hero = () => {
 
   const { t, i18n } = useTranslation();
   
-  
+
   return (
     <div className="text-white flex h-screen items-center justify-around">
-      <motion.div className="rounded-3xl p-7 bg-gray-700 bg-opacity-55 w-[450px]" {...divprop1}>
+      <motion.div className="rounded-3xl p-7 bg-gray-700 bg-opacity-35 w-[450px]" {...divprop1}>
         <div>
           <img src={Station1} alt="" width="100%" />
         </div>
@@ -39,7 +39,7 @@ const Hero = () => {
           </Link>{" "}
         </div>
       </motion.div>
-      <motion.div className="rounded-3xl p-7 bg-gray-700 bg-opacity-55 w-[450px]" {...divprop2}>
+      <motion.div className="rounded-3xl p-7 bg-gray-700 bg-opacity-35 w-[450px]" {...divprop2}>
         <div>
           <img src={Station2} alt="" width="100%" />
         </div>
