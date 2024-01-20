@@ -37,7 +37,7 @@ function App() {
   useEffect(() => {
     const socket = io("http://localhost:8000");
     socket.on("messageFromServer", (message, image_url) => {
-      console.log(message, image_url);
+      console.log("socket",message, image_url);
       setStatus({
         img: image_url,
         title: message,
