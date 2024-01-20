@@ -3,6 +3,7 @@ const jwt =require('jsonwebtoken')
 require('dotenv').config()
 
 const createToken=(id)=>{
+    
     return jwt.sign({id},process.env.SECRET_KEY,{expiresIn:'3d'})
 }
 
@@ -11,7 +12,8 @@ const loginUser=async(req,res)=>{
 
 
     try {
-        const response=await user.login(data.email,data.password)
+        const response=await user.login(data.name,data.password)
+        console.log(response);
         const token=createToken(response._id)
         res.status(200).json({
                 success:true,

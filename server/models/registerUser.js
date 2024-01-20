@@ -16,14 +16,17 @@ const registerUser = mongoose.Schema({
 registerUser.statics.login = async function (name, password) {
   if (!name || !password) throw Error("Email already in use");
 
-  const user = await this.findOne({ email });
+//   const salt=await bcrypt.genSalt(10)
+//   const hash = await bcrypt.hash(password,salt)
+//   console.log("\n",hash);
 
-  if (!user) throw Error("Email not exists. Please register first");
+  const user = await this.findOne({ name });
+
+  if (!user) throw Error("user not exists. Please register first");
 
   const match = await bcrypt.compare(password, user.password);
 
   if (!match) throw Error("Incoreect Password");
-
   return user;
 };
 

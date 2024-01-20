@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const routes = require("./routes/userRoutes");
 const http = require("http");
 const connectDB = require("./utils/database");
@@ -24,10 +23,7 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/v1", routes);
-
 
 // Socket.IO connection event
 // io.on("connection", (socket) => {
@@ -50,29 +46,30 @@ app.use("/v1", routes);
 //   });
 // });
 
-const PrisonerData = mongoose.model("Prisoner");
+// const PrisonerData = mongoose.model("Prisoner");
 
-app.post("/api/recievePrisoner", (req, res) => {
-  const { name, photo, age, gender, history } = req.body;
+// app.post("/api/recievePrisoner", (req, res) => {
+//   const { name, photo, age, gender, history } = req.body;
 
-  try {
-    PrisonerData.create({
-      name: name,
-      photo: photo,
-      age: age,
-      date: new Date(),
-      gender: gender,
-      history: history,
-    });
+//   try {
+//     PrisonerData.create({
+//       name: name,
+//       photo: photo,
+//       age: age,
+//       date: new Date(),
+//       gender: gender,
+//       history: history,
+//     });
 
-    res.json({
-      message: "Data of Prisoner received on the server",
-    });
-  } catch (err) {
-    console.log("Failed To Create Schema", err);
-    res.status(500).json({ error: "Failed to create schema" });
-  }
-});
+//     res.json({
+//       message: "Data of Prisoner received on the server",
+//     });
+//   } catch (err) {
+//     console.log("Failed To Create Schema", err);
+//     res.status(500).json({ error: "Failed to create schema" });
+//   }
+// }
+// );
 
 // app.post("/api/recieveTrafficNumber", (req, res) => {
 //   console.log(req.body.number);

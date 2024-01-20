@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import heo from "../../assests/Hello.png";
+// import heo from "../../assests/Hello.png";
 import { TiTick } from "react-icons/ti";
 import { ImCross } from "react-icons/im";
 import { useTranslation } from "react-i18next";

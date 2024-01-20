@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {motion} from "framer-motion"
 import { io } from "socket.io-client";
+
  
 
 const PoliceResponse = ({ data, imageData, startObjectDetection }) => {

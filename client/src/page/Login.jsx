@@ -7,8 +7,13 @@ import Button from "../components/Button/Button";
 
 // import { Link } from "react-router-dom";
 
-const Login = ({ handleSubmit, isloggedin }) => {
+const Login = ({ isloggedin, passData }) => {
   const nav=useNavigate()
+  const [data, setData] = useState({
+    name:"",
+    password:""
+  });
+
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   // const [isAnimating, setIsAnimating] = useState(false);
@@ -29,11 +34,7 @@ const Login = ({ handleSubmit, isloggedin }) => {
     animate: { x: isloggedin ? -5000 : 0 },
     transition: { duration: 0.4 },
   };
-//   const divprop3 = {
-//     initial: { y: 0 },
-//     animate: { y: isloggedin?-500:0 },
-//     transition: { duration: 0.4 },
-//   };
+
   const scrollBarStyle = {
     overflow: isloggedin ? "hidden" : "auto",
     scrollbarWidth: "none",
@@ -42,24 +43,27 @@ const Login = ({ handleSubmit, isloggedin }) => {
   // useEffect(()=>{
     
   // },[isloggedin])
-  if(isloggedin===true)
-  {
-    setTimeout(()=>{
-      nav("/")
-  },800)
-  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setData({name,password})
+    // setLoggedin(true)
+  };
+  useEffect(()=>{
+    passData(data);
+
+  },[data])
 
   return (
     <motion.div
       className={`h-screen login-bg px-8`}
       {...animationProps}
       style={scrollBarStyle}
-
     >
       {/* <motion.div className="py-6" {...divprop3}>
         <img src={logo} alt="" />
       </motion.div> */}
-      <div className="flex justify-between items-center px-24 mt-10">
+      <div className="flex justify-between items-center px-24 mt-28">
         <motion.div className="w-1/2 " {...divprop2}>
           <p className="text-gray-300 font-inter text-5xl font-medium leading-normal">
             A solution which{" "}
@@ -77,7 +81,7 @@ const Login = ({ handleSubmit, isloggedin }) => {
             <h3 className="text-black font-inter text-3xl font-bold leading-normal">
               Sign-in
             </h3>
-            <form className="mt-4" onSubmit={handleSubmit}>
+            <form className="mt-4" onSubmit={(e)=>handleSubmit(e)}>
               <div className="relative z-0 w-full mb-5 group">
                 <input
                   type="text"
