@@ -5,9 +5,6 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import {motion} from "framer-motion"
 
-
-
-
 const Navbar = () => {
 
   const divprop3 = {

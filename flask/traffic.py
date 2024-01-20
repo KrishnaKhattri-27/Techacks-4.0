@@ -1,89 +1,54 @@
-
 import cv2
 import numpy as np
 from time import sleep
 import requests
 
 
-def pega_centro(x, y, w, h):
-    x1 = int(w / 2)
-    y1 = int(h / 2)
-    cx = x + x1
-    cy = y + y1
-    return cx, cy
-
-
 def traffic():
-    max_result = 0
-    largura_min = 80
-    altura_min = 80
-    offset = 6
-    pos_linha = 550
-    delay = 60
-    detec = []
-    carros = 0
+    max_cars = 0  # Variable to store the maximum car count
 
-    cap = cv2.VideoCapture('video.mp4')
-    subtracao = cv2.createBackgroundSubtractorMOG2()
+    cap = cv2.VideoCapture('vb.mp4')
+    car_cascade = cv2.CascadeClassifier('cars.xml')
 
     while True:
-        ret, frame1 = cap.read()
-        tempo = float(1/delay)
-        sleep(tempo)
-        # grey = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
-        # blur = cv2.GaussianBlur(grey, (3, 3), 5)
-        img_sub = subtracao.apply(frame1)
-        dilat = cv2.dilate(img_sub, np.ones((5, 5)))
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-        dilatada = cv2.morphologyEx(dilat, cv2. MORPH_CLOSE, kernel)
-        dilatada = cv2.morphologyEx(dilatada, cv2. MORPH_CLOSE, kernel)
-        contorno, h = cv2.findContours(
-            dilatada, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        ret, frames = cap.read()
+        gray = cv2.cvtColor(frames, cv2.COLOR_BGR2GRAY)
+        cars = car_cascade.detectMultiScale(gray, 1.1, 9)
 
-        cv2.line(frame1, (25, pos_linha), (1200, pos_linha), (255, 127, 0), 3)
-        for (i, c) in enumerate(contorno):
-            (x, y, w, h) = cv2.boundingRect(c)
-            validar_contorno = (w >= largura_min) and (h >= altura_min)
-            if not validar_contorno:
-                continue
+        current_cars = len(cars)  # Update the current car count
 
-            cv2.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            centro = pega_centro(x, y, w, h)
-            detec.append(centro)
-            cv2.circle(frame1, centro, 4, (0, 0, 255), -1)
+        if current_cars > max_cars:
+            max_cars = current_cars  # Update the max_cars if the current count is greater
 
-            for (x, y) in detec:
-                if y < (pos_linha+offset) and y > (pos_linha-offset):
-                    print("Inside If LOOp")
-                    carros += 1
-                    cv2.line(frame1, (25, pos_linha),
-                             (1200, pos_linha), (0, 127, 255), 3)
-                    detec.remove((x, y))
-                    print("car is detected : "+str(carros))
-                    if carros > max_result:
-                        max_result = carros
-                cv2.putText(frame1, "VEHICLE COUNT : "+str(carros), (300, 70),
-                            cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-        cv2.imshow("Video Original", frame1)
-        # cv2.imshow("Detectar", dilatada)
+        for (x, y, w, h) in cars:
+            plate = frames[y:y + h, x:x + w]
+            cv2.rectangle(frames, (x, y), (x + w, y + h), (51, 51, 255), 2)
+            cv2.rectangle(frames, (x, y - 40), (x + w, y), (51, 51, 255), -2)
+            cv2.putText(frames, 'Car', (x, y - 10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+
+        lab1 = "Car Count: " + str(current_cars)
+        cv2.putText(frames, lab1, (40, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (147, 20, 255), 3)
+        frames = cv2.resize(frames, (600, 400))
+        cv2.imshow('Car Detection System', frames)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            print("Max Car Detected was " + str(max_result))
-            body = {
-                'number': max_result
-            }
-            url = 'http://localhost:8000/api/recieveTrafficNumber'
-            response = requests.post(url, json=body)
-
-            if response.status_code == 200:
-                print('Traffic Number sent successfully:', response.json())
-            else:
-                print('Error:', response.status_code, response.text)
-
             break
+
+    print("Maximum Car Count:", max_cars)
+
+    # Perform your traffic related operations here
+    body = {
+        'number': max_cars
+    }
+    url = 'http://localhost:8000/api/recieveTrafficNumber'
+    response = requests.post(url, json=body)
+
+    if response.status_code == 200:
+        print('Traffic Number sent successfully:', response.json())
+    else:
+        print('Error:', response.status_code, response.text)
 
     cv2.destroyAllWindows()
     cap.release()
-
-
-traffic()

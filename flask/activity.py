@@ -52,7 +52,7 @@ def ActivityDetection():
     body = {
         'prediction': predicted_class,
     }
-    url = 'http://localhost:5000/api/recieveActivityPrediction'
+    url = 'http://localhost:8000/api/recieveActivityPrediction'
     response = requests.post(url, json=body)
 
     # Check the response
