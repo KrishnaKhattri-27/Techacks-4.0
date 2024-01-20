@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-// const routes = require("./routes/userRoutes");
+const routes = require("./routes/userRoutes");
 const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io"); // Import Server from socket.io
@@ -9,6 +9,7 @@ require("./models/PrisonerData");
 const mongoose = require("mongoose");
 const app = express();
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
     origin: ["http://localhost:3000"],
@@ -25,7 +26,7 @@ app.use(
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/v1", routes);
+// app.use("/v1", routes);
 
 // Socket.IO connection event
 io.on("connection", (socket) => {
@@ -82,6 +83,40 @@ app.post("/api/recieveActivityPrediction", (req, res) => {
   res.json({
     message: "ACtivity predictions received on the server",
   });
+});
+
+const { PoliceStation } = require("./models/PoliceStation"); // Update the path accordingly
+
+app.post("/api/findNearestPoliceStation", async (req, res) => {
+  const { userLocation } = req.body;
+
+  try {
+    const nearestPoliceStation = await PoliceStation.findOne({
+      location: {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [userLocation.longitude, userLocation.latitude],
+          },
+          $maxDistance: 10000,
+        },
+      },
+    });
+
+    if (!nearestPoliceStation) {
+      return res
+        .status(404)
+        .json({ message: "No police station found nearby." });
+    }
+
+    res.json({
+      message: "Nearest police station found.",
+      data: nearestPoliceStation,
+    });
+  } catch (err) {
+    console.error("Error finding nearest police station:", err);
+    res.status(500).json({ error: "Failed to find nearest police station." });
+  }
 });
 
 // Start the server
