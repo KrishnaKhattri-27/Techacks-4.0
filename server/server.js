@@ -49,11 +49,10 @@ app.use("/v1", routes);
 //     message: "Image received on the server",
 //   });
 // });
-
 const PrisonerData = mongoose.model("Prisoner");
 
 app.post("/api/recievePrisoner", (req, res) => {
-  const { name, photo, age, gender, history } = req.body;
+  const { name, photo, age, gender, history, location } = req.body;
 
   try {
     PrisonerData.create({
@@ -63,6 +62,10 @@ app.post("/api/recievePrisoner", (req, res) => {
       date: new Date(),
       gender: gender,
       history: history,
+      location: {
+        type: "Point",
+        coordinates: [location.longitude, location.latitude],
+      },
     });
 
     res.json({
