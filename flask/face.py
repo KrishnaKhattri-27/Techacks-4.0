@@ -42,10 +42,14 @@ def capture_and_verify():
                 'photo': secure_url,
                 'age': 21,
                 'gender': "Male",
-                'history': 'Found guilty for looking Hot'
+                'history': 'Found guilty for looking Hot',
+                'location': {
+                    'longitude': 30.51617198179602,
+                    'latitude': 76.65925099420542
+                }
             }
 
-            url = 'http://localhost:5000/api/recievePrisoner'
+            url = 'http://localhost:8000/api/recievePrisoner'
             response = requests.post(url, json=body)
 
             if response.status_code == 200:
@@ -58,6 +62,8 @@ def capture_and_verify():
                 exit()
 
         cv2.imshow("Face", frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        exit()
 
     cap.release()
     cv2.destroyAllWindows()

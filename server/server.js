@@ -45,7 +45,6 @@ app.use("/v1", routes);
 //     message: "Image received on the server",
 //   });
 // });
-
 // const PrisonerData = mongoose.model("Prisoner");
 
 // app.post("/api/recievePrisoner", (req, res) => {
