@@ -1,5 +1,5 @@
 // const notification=require("../controllers/notification")
-// const mail=require("../controllers/mail")
+const mail=require("../controllers/mail")
 const express=require('express')
 const loginUser=require('../controllers/loginUser')
 const authRequired=require('../middlewares/authRequired')

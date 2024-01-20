@@ -38,8 +38,8 @@ def ActivityDetection():
     IMAGE_HEIGHT, IMAGE_WIDTH = 64, 64
     SEQUENCE_LENGTH = 20
 
-    # new_video_path = "1.mpg"
-    new_video_path = "3.avi"
+    new_video_path = "1.mpg"
+    # new_video_path = "3.avi"
     new_features = preprocess_new_video(
         new_video_path, SEQUENCE_LENGTH, IMAGE_HEIGHT, IMAGE_WIDTH)
 
